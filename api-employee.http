@@ -3,6 +3,7 @@
 #-H "Content-Type:application/json" 'http://localhost:8080/employee'
 #-d '{"firstName":"Jane","lastName":"Doo","companyId":"123456"}'
 POST http://localhost:8080/employee
+Authorization: Basic dXNlciA4NjljMjVkZS0zMGI0LTRjMDgtYTE5Yy03ZjNlNTJkMjExNzc=
 Content-Type: application/json
 
 {"firstName":"Jane","lastName":"Doo","companyId":"123456"}

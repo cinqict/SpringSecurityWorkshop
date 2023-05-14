@@ -2,21 +2,18 @@ package com.cinqict.workshop.controller;
 
 import com.cinqict.workshop.domain.Employee;
 import com.cinqict.workshop.service.EmployeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/employee")
 public class EmployeeController {
 
     private final EmployeeService employeeService;
-
-    public EmployeeController(final EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
 
     @PostMapping
     public Employee create(@RequestBody final Employee employee) {

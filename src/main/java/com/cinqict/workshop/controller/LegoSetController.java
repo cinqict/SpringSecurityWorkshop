@@ -2,21 +2,19 @@ package com.cinqict.workshop.controller;
 
 import com.cinqict.workshop.domain.LegoBoxset;
 import com.cinqict.workshop.service.LegoBoxsetService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/lego")
 public class LegoSetController {
 
     private final LegoBoxsetService legoBoxsetService;
-
-    public LegoSetController(final LegoBoxsetService legoBoxsetService) {
-        this.legoBoxsetService = legoBoxsetService;
-    }
 
     @PostMapping
     public LegoBoxset create(@RequestBody final LegoBoxset legoBoxset) {
