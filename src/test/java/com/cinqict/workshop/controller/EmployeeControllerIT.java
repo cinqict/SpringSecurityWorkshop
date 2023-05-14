@@ -21,12 +21,9 @@ class EmployeeControllerIT {
 
     @Autowired
     WebApplicationContext wac;
-
     MockMvc mockMvc;
-
     @MockBean
     EmployeeService employeeService;
-
     @MockBean
     LegoBoxsetService legoBoxsetService;
 
