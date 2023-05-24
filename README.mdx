@@ -1,53 +1,96 @@
 # Springboot Security Workshop by Cinq ICT
 
-Assignment 002 - Path Matchers
+Assignment 003 - Overriding default Beans
 
-Spring Security allows you to model your authorization at the request level.
-For example, with Spring Security you can say that all pages under /admin require one authority while all other pages simply require authentication.
+003 A: Override the default UserDetailsManager implementation:
 
-By default, Spring Security requires that every request be authenticated. That said, any time you use an HttpSecurity instance, it’s necessary to declare your authorization rules.
-
-There are different ways to declare the authentication:
-- Ant matchers
-- Regex
-- Http
-- more
-
-More info see: https://docs.spring.io/spring-security/reference/servlet/authorization/authorize-http-requests.html
-
-002 A: Ant Matchers
-
-e.g.
 ```
-http
-    .authorizeHttpRequests((authorize) -> authorize
-        .requestMatchers("/resource/**").authenticated()
-        .anyRequest().authenticated()
-    )
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("spring")
+                .password("password")
+                .roles("ADMIN")
+                .build();
+        UserDetails user1 = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("password")
+                .roles("USER")
+                .build();
+        return new InMemoryUserDetailsManager(user, user1);
+    }
 ```
 
-002 B: Regex Matchers
+003 B: Use the BCrypt Algorithm to encode the passwords.
 ```
-http
-    .authorizeHttpRequests((authorize) -> authorize
-        .requestMatchers(RegexRequestMatcher.regexMatcher("/resource/[A-Za-z0-9]+")).authenticated()
-        .anyRequest().denyAll()
-    )
+   @Bean
+    PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+```
+After testing it doesn't work! Passwords now need to be stored as their encoded value.
+
+```
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+
+        UserDetails user = User.builder()
+                .username("spring")
+                .password(passwordEncoder.encode("password"))
+                .roles("ADMIN")
+                .build();
+
+        UserDetails user1 = User.builder()
+                .username("user")
+                .password(passwordEncoder.encode("password"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, user1);
+    }
+```
+Passwords are no longer stored has plain text. Only the hash values.e.g. as <key><hashvalue>
+"{bcrypt}$2a$10$7tYAvVL2/KwcQTcQywHIleKueg4ZK7y7d44hKyngjTwHCDlesxdla"
+"{sha256}1296cefceb47413d3fb91ac7586a4625c33937b4d3109f5a4dd96c79c46193a029db713b96006ded"
+
+
+003 C: Using multiple different encoding algorithms (Delagating Password Encoder):
+
+```
+    @Bean
+    PasswordEncoder passwordEncoder(){
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 ```
 
-002 C: Http Method
+You can now use multiple different encoders. Useful for integration with legacy systems.
+Check out the implementation of the createDelegatingPasswordEncoder methode. If more/other encoders needed,
+create your own version of the 'PasswordEncoderFactories' class.
+
 ```
-http
-    .authorizeHttpRequests((authorize) -> authorize
-        .requestMatchers(HttpMethod.GET).permitAll()
-        .anyRequest().authenticated();
-    )
+    @Bean
+    public InMemoryUserDetailsManager userDetailsService(PasswordEncoder passwordEncoder) {
+
+        UserDetails user = User.builder()
+                .username("spring")
+                .password(passwordEncoder().encode("password"))
+                .roles("ADMIN")
+                .build();
+
+        UserDetails user1 = User.builder()
+                .username("user")
+                .password("{ldap}"+new LdapShaPasswordEncoder().encode("password"))
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, user1);
+    }
 ```
 
-002 D: Bonus Unit tests
 
-Use Mockmvc to mock test some endpoints with your custom security.
+003 D: Bonus encode and decode strings using the following decoders:
 
+*
 
 Start the application via mvn
 ```
