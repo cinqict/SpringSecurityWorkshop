@@ -34,7 +34,7 @@ public class RestHeaderAuthFilter extends AbstractAuthenticationProcessingFilter
 We will use the addFilterBefore method to make sure the filter is run before the basicAuthenticationFilter.
 
 ```
- @Bean
+    @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -78,7 +78,7 @@ We do not need most of the default implementation code.
 
 OnSuccessfull authentication we only want to update the SecurityContext
 ```
-@Override
+    @Override
     protected void successfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final FilterChain chain, final Authentication authResult) {
         SecurityContextHolder.getContext().setAuthentication(authResult);
     }
@@ -86,7 +86,7 @@ OnSuccessfull authentication we only want to update the SecurityContext
 
 OnUnSuccessFull authentication we will clear the SecurityContext and return UNAUTHORIZED Error code
 ```
-@Override
+    @Override
     protected void unsuccessfulAuthentication(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException failed) throws IOException {
         SecurityContextHolder.clearContext();
         response.sendError(HttpStatus.UNAUTHORIZED.value(), HttpStatus.UNAUTHORIZED.getReasonPhrase());
@@ -125,7 +125,7 @@ will be called. If the headers are found, but incorrect the Filterchain with sto
 
 
 ```
-@Override
+    @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain)
             throws IOException, ServletException {
 
