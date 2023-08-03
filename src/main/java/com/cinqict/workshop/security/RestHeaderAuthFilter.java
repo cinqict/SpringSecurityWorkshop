@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import java.io.IOException;
 import java.util.Optional;
 
+//This is purposely not a Component or Bean!
 public class RestHeaderAuthFilter extends AbstractAuthenticationProcessingFilter {
 
     private static final String API_SECRET_HEADER = "Api-Secret";
