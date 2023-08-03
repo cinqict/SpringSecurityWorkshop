@@ -1,5 +1,14 @@
 # Springboot Security Workshop by Cinq ICT
 
+Out-of-the-Box: Spring boot Security is auto-configures the following classes:
+ProviderManager, implements the Authentication Manager Interface
+DaoAuthenticationProvider, implements the Authentication Provider Interface
+InMemoryUserDetailsManager, implements the UserDetailsManager and UserDetailsService interfaces
+DelegatingPasswordEncoder, implements the PasswordEncoder interface
+
+By creating new Beans we can override these defaults.
+
+
 Assignment 003 - Overriding default Beans
 
 003 A: Override the default UserDetailsManager implementation:
@@ -88,9 +97,9 @@ create your own version of the 'PasswordEncoderFactories' class.
 ```
 
 
-003 D: Bonus encode and decode strings using the following decoders:
+003 D: Bonus encode and decode strings using other decoders:
+https://docs.spring.io/spring-security/reference/features/authentication/password-storage.html#authentication-password-storage-bcrypt
 
-*
 
 Start the application via mvn
 ```
